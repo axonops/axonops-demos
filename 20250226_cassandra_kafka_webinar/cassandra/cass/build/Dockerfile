@@ -132,7 +132,7 @@ VOLUME /var/lib/cassandra
 
 RUN curl -L https://packages.axonops.com/apt/repo-signing-key.gpg | gpg --dearmor -o /usr/share/keyrings/axonops.gpg; \
 	echo "deb [arch=arm64,amd64 signed-by=/usr/share/keyrings/axonops.gpg] https://packages.axonops.com/apt axonops-apt main" >> /etc/apt/sources.list.d/axonops-apt.list; \
-	apt-get update && apt-get install -y axon-cassandra5.0-agent-jdk11 && apt-get -y clean
+	apt-get update && apt-get install -y axon-agent && apt-get install -y axon-cassandra5.0-agent-jdk11 && apt-get -y clean
 
 RUN touch /var/run/utmp
 
