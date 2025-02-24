@@ -30,17 +30,17 @@ RUN set -eux; \
 	apt-get update; \
 	apt-get install -y --no-install-recommends \
 		sudo \
+		software-properties-common \
 		openssh-server \
 		libjemalloc2 \
 		procps \
-		python3 \
+		net-tools \
 		iproute2 \
 		numactl \
 		webhook \
 		gawk \
 		grep \
 		vim \
-		dstat \
 		jq \
 		ca-certificates \
 		gnupg \
@@ -51,6 +51,16 @@ RUN set -eux; \
 	libjemalloc="$(readlink -e /usr/lib/*/libjemalloc.so.2)"; \
 	ln -sT "$libjemalloc" /usr/local/lib/libjemalloc.so; \
 	ldconfig
+
+
+RUN add-apt-repository ppa:deadsnakes/ppa && apt-get update
+RUN apt-get install -y python3.11
+# (Optional) Install additional Python modules if needed, such as pip for Python 3.11
+RUN apt-get install -y python3.11-venv python3.11-distutils && \
+    wget https://bootstrap.pypa.io/get-pip.py && \
+    python3.11 get-pip.py && \
+    rm get-pip.py
+
 
 RUN echo 'cassandra ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
 
