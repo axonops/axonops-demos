@@ -24,7 +24,7 @@ services:
     entrypoint: ["/bin/sh","-c","startwebhooks.sh && startwebhooks.sh && startcassandra.sh && tailcassandralogs.sh"]
     ports:
       - "9042:9042"
-      - "9000:9000"
+      - "9001:9000"
       - "2222:22"
     networks:
       axonops-demo-network:
