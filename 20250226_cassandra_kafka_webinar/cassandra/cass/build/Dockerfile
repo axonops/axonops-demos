@@ -40,11 +40,15 @@ RUN set -eux; \
 # Create the SSH runtime directory
 RUN mkdir /var/run/sshd
 
-# Set the root password (change 'rootpassword' to a secure password in production)
-RUN echo 'root:rootpassword' | chpasswd
+# Generate SSH host keys
+RUN ssh-keygen -A
 
-# Update the SSH configuration to permit root login
-RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+# Remove the root password to enable passwordless login
+RUN passwd -d root
+
+# Update SSH configuration to permit root login and allow empty passwords
+RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config && \
+    sed -i 's/#PermitEmptyPasswords no/PermitEmptyPasswords yes/' /etc/ssh/sshd_config
 
 # grab gosu for easy step-down from root
 # https://github.com/tianon/gosu/releases
