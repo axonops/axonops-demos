@@ -41,7 +41,10 @@ RUN set -eux; \
 RUN mkdir /var/run/sshd
 
 # Generate SSH host keys
+RUN mkdir -p /etc/ssh
 RUN ssh-keygen -A
+RUN chmod 600 /etc/ssh/ssh_host_* && chmod 644 /etc/ssh/ssh_host_*.pub
+
 
 # Remove the root password to enable passwordless login
 RUN passwd -d root
