@@ -21,3 +21,4 @@ sudo chown -R 999:999 /var/log/cassandra
 # Create AxonOps logs dir
 chown -R 9988:9988 /var/log/axonops
 chown -R 9988:9988 /var/lib/axonops
+chown -R 9988:9988 /etc/axonops
