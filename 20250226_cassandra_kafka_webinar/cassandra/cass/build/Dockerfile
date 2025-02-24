@@ -24,7 +24,10 @@ RUN echo 'export PATH="/opt/java/openjdk/bin:/opt/cassandra/bin:$PATH"' >> /etc/
 # explicitly set user/group IDs
 RUN set -eux; \
 	groupadd -r cassandra --gid=999; \
-	useradd -m -d "$CASSANDRA_HOME" -r -g cassandra --uid=999 cassandra
+	useradd -m -d "$CASSANDRA_HOME" -r -g cassandra --uid=999 cassandra; \
+	groupadd axonops --gid 9988; \
+	useradd --gid 9988 --uid 9988 --shell /bin/bash -c "AxonOps" -G cassandra axonops; \
+	usermod -aG axonops cassandra
 
 
 RUN set -eux; \
@@ -42,6 +45,8 @@ RUN set -eux; \
 		gawk \
 		grep \
 		vim \
+		curl \
+		netcat-openbsd \
 		jq \
 		ca-certificates \
 		gnupg \
@@ -123,6 +128,14 @@ RUN set -eux; \
 	cassandra -v
 
 VOLUME /var/lib/cassandra
+
+
+RUN curl -L https://packages.axonops.com/apt/repo-signing-key.gpg | gpg --dearmor -o /usr/share/keyrings/axonops.gpg; \
+	echo "deb [arch=arm64,amd64 signed-by=/usr/share/keyrings/axonops.gpg] https://packages.axonops.com/apt axonops-apt main" >> /etc/apt/sources.list.d/axonops-apt.list; \
+	apt-get update && apt-get install -y axon-cassandra$(echo "$CASSANDRA_VERSION" | sed -r 's/^([0-9]+\.[0-9]+).*$/\1/')-agent && apt-get -y clean
+
+RUN touch /var/run/utmp
+
 
 COPY files/isrepairrunning.sh /usr/local/bin/
 COPY files/repairnode.sh /usr/local/bin/
