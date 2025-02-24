@@ -13,19 +13,10 @@ eexit() {
     exit 1
 }
 
-logit "Starting SSH service..."
-# Start the SSH daemon; by default, sshd will fork to the background
-#exec sudo /usr/sbin/sshd -D -e
-sudo /usr/sbin/sshd
+logit "Sorting permissions"
 
 sudo chown -R 999:999 /var/lib/cassandra
 sudo chown -R 999:999 /var/log/cassandra
 
-logit $PATH
-
-# Verify that the SSH daemon started successfully
-if pgrep sshd > /dev/null; then
-  logit "SSH service is running."
-else
-  eexit "Failed to start SSH service!"
-fi
+          # Create AxonOps logs dir
+          # chown -R 9988:9988 /var/log/axonops
