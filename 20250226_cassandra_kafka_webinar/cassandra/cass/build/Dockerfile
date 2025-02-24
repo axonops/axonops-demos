@@ -18,7 +18,7 @@ ENV CQLSH_PYTHON /usr/bin/python3.11
 
 # Create a script that updates the PATH and place it in /etc/profile.d/
 RUN echo 'export PATH="/opt/java/openjdk/bin:/opt/cassandra/bin:$PATH"' >> /etc/profile.d/custom_path.sh; \
-	echo 'export CQLSH_PYTHON="/usr/bin/python3.11"' >> /etc/profile.d/custom_path.sh \
+	echo 'export CQLSH_PYTHON="/usr/bin/python3.11"' >> /etc/profile.d/custom_path.sh; \
 	chmod +x /etc/profile.d/custom_path.sh
 
 # explicitly set user/group IDs
