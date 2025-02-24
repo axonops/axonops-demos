@@ -13,6 +13,9 @@ eexit() {
     exit 1
 }
 
+logit $PATH
+
+
 processcount=$(ps -ef | grep java | grep -ie cassandra | grep -v grep | wc -l)
 
 if (( ${processcount} != 0 )) ; then

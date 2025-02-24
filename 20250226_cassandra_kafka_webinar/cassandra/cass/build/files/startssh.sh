@@ -18,6 +18,8 @@ logit "Starting SSH service..."
 #exec sudo /usr/sbin/sshd -D -e
 sudo /usr/sbin/sshd
 
+logit $PATH
+
 # Verify that the SSH daemon started successfully
 if pgrep sshd > /dev/null; then
   logit "SSH service is running."

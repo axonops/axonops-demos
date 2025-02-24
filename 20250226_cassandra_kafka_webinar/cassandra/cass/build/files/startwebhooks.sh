@@ -13,4 +13,6 @@ eexit() {
     exit 1
 }
 
+logit $PATH
+
 webhook -hooks /var/webhook/hooks.json -verbose -urlprefix cassandra &
