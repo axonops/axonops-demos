@@ -12,8 +12,8 @@ RUN set -eux; \
 	adduser -S -h "$CASSANDRA_HOME" -u 1001 -G cassandra cassandra
 
 RUN set -eux; \
-	apt-get update; \
-	apt-get install -y --no-install-recommends \
+	apk update; \
+	apk add --no-cache \
 		openssh-server \
 		libjemalloc2 \
 		procps \
