@@ -50,6 +50,7 @@ RUN ssh-keygen -A && \
 
 RUN ls -l /etc/ssh/ssh_host_*
 
+RUN sed -i 's/^UsePAM yes/UsePAM no/' /etc/ssh/sshd_config
 
 # Remove the root password to enable passwordless login
 RUN passwd -d root
