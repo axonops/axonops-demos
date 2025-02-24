@@ -9,6 +9,9 @@ ENV PATH=$JAVA_HOME/bin:$PATH
 # Verify Java installation (optional debugging step)
 RUN java -version
 
+RUN echo "export JAVA_HOME=$JAVA_HOME" >> /etc/profile.d/java.sh && \
+    echo "export PATH=$JAVA_HOME/bin:$PATH" >> /etc/profile.d/java.sh
+
 ENV CASSANDRA_HOME /opt/cassandra
 ENV PATH=$CASSANDRA_HOME/bin:$PATH
 
