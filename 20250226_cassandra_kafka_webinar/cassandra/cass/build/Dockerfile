@@ -8,6 +8,7 @@ RUN java -version
 
 ENV CASSANDRA_HOME /opt/cassandra
 ENV CASSANDRA_CONF /opt/cassandra/conf
+ENV CASSANDRA_LOG_DIR /var/log/cassandra
 ENV CASSANDRA_VERSION 5.0.3
 ENV TARBALL apache-cassandra-${CASSANDRA_VERSION}-bin.tar.gz
 ENV PATH $PATH:${CASSANDRA_HOME}/bin
