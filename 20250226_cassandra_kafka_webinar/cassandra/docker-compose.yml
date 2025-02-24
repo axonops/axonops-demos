@@ -1,7 +1,8 @@
 version: "3.8"
 
+
 networks:
-  mynet:
+  axonops-demo-network:
     driver: macvlan
     driver_opts:
       parent: enp13s0
@@ -14,18 +15,19 @@ networks:
 services:
 
   cass-alpha1:
-    image: digitalis-cassandra:3.11.8
+    image: axonops-demo-cassandra:5.0.3
     build:
       context: ./cass/build
     container_name: cass-alpha1
     hostname: cass-alpha1
     mem_limit: 8g
-    entrypoint: ["/bin/sh","-c","startwebhooks.sh && startcassandra.sh && tailcassandralogs.sh"]
+    entrypoint: ["/bin/sh","-c","startwebhooks.sh && startwebhooks.sh && startcassandra.sh && tailcassandralogs.sh"]
     ports:
       - "9042:9042"
-      - "9001:9000"
+      - "9000:9000"
+      - "22:22"
     networks:
-      digitalis-cassandra:
+      axonops-demo-network:
         ipv4_address: 192.168.1.200
     cap_add:
       - IPC_LOCK

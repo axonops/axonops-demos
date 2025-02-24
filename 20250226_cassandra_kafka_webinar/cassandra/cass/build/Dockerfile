@@ -1,4 +1,4 @@
-FROM adoptopenjdk:8-jre-hotspot-bionic
+FROM eclipse-temurin:11.0.26_4-jre-alpine-3.21
 
 RUN cat /etc/os-release
 RUN uname -r
@@ -21,25 +21,44 @@ RUN set -eux; \
 RUN set -eux; \
 	apt-get update; \
 	apt-get install -y --no-install-recommends \
-		libjemalloc-dev \
+		openssh-server \
+		libjemalloc2 \
 		procps \
-		python \
+		python3 \
 		iproute2 \
 		numactl \
 		webhook \
 		gawk \
 		grep \
+		vim \
+		dstat \
 		jq \
+		ca-certificates \
+		gnupg \
+		wget \
 	; \
-	rm -rf /var/lib/apt/lists/*
+	rm -rf /var/lib/apt/lists/*; \
+# https://issues.apache.org/jira/browse/CASSANDRA-15767 ("bin/cassandra" only looks for "libjemalloc.so" or "libjemalloc.so.1" which doesn't match our "libjemalloc.so.2")
+	libjemalloc="$(readlink -e /usr/lib/*/libjemalloc.so.2)"; \
+	ln -sT "$libjemalloc" /usr/local/lib/libjemalloc.so; \
+	ldconfig
+
+# Create the SSH runtime directory
+RUN mkdir /var/run/sshd
+
+# Set the root password (change 'rootpassword' to a secure password in production)
+RUN echo 'root:rootpassword' | chpasswd
+
+# Update the SSH configuration to permit root login
+RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
 
 # grab gosu for easy step-down from root
 # https://github.com/tianon/gosu/releases
-ENV GOSU_VERSION 1.12
+ENV GOSU_VERSION 1.17
 RUN set -eux; \
 	savedAptMark="$(apt-mark showmanual)"; \
 	apt-get update; \
-	apt-get install -y --no-install-recommends ca-certificates dirmngr gnupg wget; \
+	apt-get install -y --no-install-recommends ca-certificates gnupg wget; \
 	rm -rf /var/lib/apt/lists/*; \
 	dpkgArch="$(dpkg --print-architecture | awk -F- '{ print $NF }')"; \
 	wget -O /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$dpkgArch"; \
@@ -56,9 +75,11 @@ RUN set -eux; \
 	gosu --version; \
 	gosu nobody true
 
+ENV CASSANDRA_HOME /opt/cassandra
+ENV CASSANDRA_CONF /etc/cassandra
 ENV PATH $CASSANDRA_HOME/bin:$PATH
 
-ENV CASSANDRA_VERSION 3.11.8
+ENV CASSANDRA_VERSION 5.0.3
 ENV TARBALL apache-cassandra-${CASSANDRA_VERSION}-bin.tar.gz
 
 COPY files/${TARBALL} /${TARBALL}
@@ -85,6 +106,7 @@ COPY files/repaircluster.sh /usr/local/bin/
 COPY files/waitforit.sh /usr/local/bin/
 COPY files/repaircluster.sh /usr/local/bin/
 COPY files/setupcassandradata.sh /usr/local/bin/
+COPY files/startssh.sh /usr/local/bin/
 COPY files/startwebhooks.sh /usr/local/bin/
 COPY files/startcassandra.sh /usr/local/bin/
 COPY files/stopcassandra.sh /usr/local/bin/
@@ -119,6 +141,7 @@ RUN set -eux; \
     chmod 777 /usr/local/bin/waitforit.sh; \
 	chmod 777 /usr/local/bin/repaircluster.sh; \
 	chmod 777 /usr/local/bin/setupcassandradata.sh; \
+	chmod 777 /usr/local/bin/startssh.sh; \
 	chmod 777 /usr/local/bin/startwebhooks.sh; \
 	chmod 777 /usr/local/bin/startcassandra.sh; \
 	chmod 777 /usr/local/bin/stopcassandra.sh; \
@@ -153,4 +176,4 @@ ENV LOCAL_JMX no
 # 9042: CQL
 # 9142: CQL over SSL (if enabled on seperate port)
 # 9000: Web Hook Port
-EXPOSE 7000 7001 7199 9042 9142 9000
+EXPOSE 22 7000 7001 7199 9042 9142 9000
