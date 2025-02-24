@@ -1,4 +1,4 @@
-FROM docker.io/eclipse-temurin:11.0.26_4-jre-alpine-3.21
+FROM docker.io/eclipse-temurin:11.0.26_4-jre
 
 RUN cat /etc/os-release
 RUN uname -r
@@ -8,12 +8,13 @@ ENV CASSANDRA_CONF /opt/cassandra/conf
 
 # explicitly set user/group IDs
 RUN set -eux; \
-	addgroup -g 1001 -S cassandra; \
-	adduser -S -h "$CASSANDRA_HOME" -u 1001 -G cassandra cassandra
+	groupadd -r cassandra --gid=999; \
+	useradd -m -d "$CASSANDRA_HOME" -r -g cassandra --uid=999 cassandra
+
 
 RUN set -eux; \
-	apk update; \
-	apk add --no-cache \
+	apt-get update; \
+	apt-get install -y --no-install-recommends \
 		openssh-server \
 		libjemalloc2 \
 		procps \
@@ -67,6 +68,7 @@ RUN set -eux; \
 	chmod +x /usr/local/bin/gosu; \
 	gosu --version; \
 	gosu nobody true
+
 
 ENV PATH $CASSANDRA_HOME/bin:$PATH
 
