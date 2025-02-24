@@ -41,3 +41,8 @@ services:
       - ./cass/docker_containers/cass-alpha1/cdc_raw:/var/lib/cassandra/cdc_raw
       - ./cass/docker_containers/cass-alpha1/saved_caches:/var/lib/cassandra/saved_caches
       - ./cass/docker_containers/cass-alpha1/logs:/var/log/cassandra
+      - ./cass/docker_containers/cass-alpha1/axonops/conf:/etc/axonops
+      - ./cass/docker_containers/cass-alpha1/axonops/logs:/var/log/axonops
+      - ./cass/docker_containers/cass-alpha1/axonops/data:/var/lib/axonops
+
+

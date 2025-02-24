@@ -293,5 +293,7 @@ if [ "x$MX4J_PORT" != "x" ]; then
     fi
 fi
 
+JVM_OPTS="$JVM_OPTS -javaagent:/usr/share/axonops/axon-cassandra5.0-agent.jar=/etc/axonops/axon-agent.yml"
+
 JVM_OPTS="$JVM_OPTS $JVM_EXTRA_OPTS"
 
