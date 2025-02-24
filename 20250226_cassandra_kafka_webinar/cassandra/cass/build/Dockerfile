@@ -1,4 +1,4 @@
-FROM docker.io/eclipse-temurin:11.0.26_4-jre
+FROM docker.io/eclipse-temurin:11-jre-jammy
 
 RUN cat /etc/os-release
 RUN uname -r
@@ -12,13 +12,15 @@ ENV CASSANDRA_LOG_DIR /var/log/cassandra
 ENV CASSANDRA_VERSION 5.0.3
 ENV TARBALL apache-cassandra-${CASSANDRA_VERSION}-bin.tar.gz
 ENV PATH $PATH:${CASSANDRA_HOME}/bin
-ENV CQLSH_PYTHON /usr/bin/python3.11
+# ENV CQLSH_PYTHON /usr/bin/python3.11
 
 #/opt/java/openjdk/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/cassandra/bin
 
 # Create a script that updates the PATH and place it in /etc/profile.d/
+# RUN echo 'export PATH="/opt/java/openjdk/bin:/opt/cassandra/bin:$PATH"' >> /etc/profile.d/custom_path.sh; \
+# 	echo 'export CQLSH_PYTHON="/usr/bin/python3.11"' >> /etc/profile.d/custom_path.sh; \
+# 	chmod +x /etc/profile.d/custom_path.sh
 RUN echo 'export PATH="/opt/java/openjdk/bin:/opt/cassandra/bin:$PATH"' >> /etc/profile.d/custom_path.sh; \
-	echo 'export CQLSH_PYTHON="/usr/bin/python3.11"' >> /etc/profile.d/custom_path.sh; \
 	chmod +x /etc/profile.d/custom_path.sh
 
 # explicitly set user/group IDs
@@ -59,13 +61,13 @@ RUN set -eux; \
 	ldconfig
 
 
-RUN add-apt-repository ppa:deadsnakes/ppa && apt-get update
-RUN apt-get install -y python3.11
-# (Optional) Install additional Python modules if needed, such as pip for Python 3.11
-RUN apt-get install -y python3.11-venv python3.11-distutils && \
-    wget https://bootstrap.pypa.io/get-pip.py && \
-    python3.11 get-pip.py && \
-    rm get-pip.py
+# RUN add-apt-repository ppa:deadsnakes/ppa && apt-get update
+# RUN apt-get install -y python3.11
+# # (Optional) Install additional Python modules if needed, such as pip for Python 3.11
+# RUN apt-get install -y python3.11-venv python3.11-distutils && \
+#     wget https://bootstrap.pypa.io/get-pip.py && \
+#     python3.11 get-pip.py && \
+#     rm get-pip.py
 
 
 RUN echo 'cassandra ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
