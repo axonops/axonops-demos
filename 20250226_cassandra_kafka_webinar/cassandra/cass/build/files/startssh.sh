@@ -15,7 +15,7 @@ eexit() {
 
 logit "Starting SSH service..."
 # Start the SSH daemon; by default, sshd will fork to the background
-sudo /usr/sbin/sshd
+exec sudo /usr/sbin/sshd -D -e
 
 # Verify that the SSH daemon started successfully
 if pgrep sshd > /dev/null; then
