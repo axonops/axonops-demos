@@ -1,0 +1,26 @@
+version: "3.8"
+services:
+  hello1:
+    image: docker.io/nginxdemos/hello
+    container_name: hello1
+    networks:
+      mynet:
+        ipv4_address: 192.168.1.200
+
+  hello2:
+    image: docker.io/nginxdemos/hello
+    container_name: hello2
+    networks:
+      mynet:
+        ipv4_address: 192.168.1.201
+
+networks:
+  mynet:
+    driver: macvlan
+    driver_opts:
+      parent: enp13s0
+    ipam:
+      config:
+        - subnet: 192.168.1.0/24
+          gateway: 192.168.1.1
+          ip_range: 192.168.1.200/29
