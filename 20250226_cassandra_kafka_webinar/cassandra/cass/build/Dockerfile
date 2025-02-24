@@ -12,11 +12,12 @@ ENV CASSANDRA_LOG_DIR /var/log/cassandra
 ENV CASSANDRA_VERSION 5.0.3
 ENV TARBALL apache-cassandra-${CASSANDRA_VERSION}-bin.tar.gz
 ENV PATH $PATH:${CASSANDRA_HOME}/bin
+ENV CQLSH_PYTHON /usr/bin/python3.11
 
 #/opt/java/openjdk/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/cassandra/bin
 
 # Create a script that updates the PATH and place it in /etc/profile.d/
-RUN echo 'export PATH="/opt/java/openjdk/bin:/opt/cassandra/bin:$PATH"' \
+RUN echo -e 'export PATH="/opt/java/openjdk/bin:/opt/cassandra/bin:$PATH"\nexport CQLSH_PYTHON=/usr/bin/python3.11' \
     > /etc/profile.d/custom_path.sh && \
     chmod +x /etc/profile.d/custom_path.sh
 
