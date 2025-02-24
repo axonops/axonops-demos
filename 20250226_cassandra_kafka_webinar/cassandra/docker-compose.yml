@@ -23,6 +23,7 @@ services:
 
           # Create AxonOps logs dir
           # chown -R 9988:9988 /var/log/axonops
+          
         "
       
     volumes:
