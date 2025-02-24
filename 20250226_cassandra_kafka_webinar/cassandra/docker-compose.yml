@@ -1,0 +1,41 @@
+version: "3.8"
+
+networks:
+  mynet:
+    driver: macvlan
+    driver_opts:
+      parent: enp13s0
+    ipam:
+      config:
+        - subnet: 192.168.1.0/24
+          gateway: 192.168.1.1
+          ip_range: 192.168.1.200/29
+
+services:
+
+  cass-alpha1:
+    image: digitalis-cassandra:3.11.8
+    build:
+      context: ./cass/build
+    container_name: cass-alpha1
+    hostname: cass-alpha1
+    mem_limit: 8g
+    entrypoint: ["/bin/sh","-c","startwebhooks.sh && startcassandra.sh && tailcassandralogs.sh"]
+    ports:
+      - "9042:9042"
+      - "9001:9000"
+    networks:
+      digitalis-cassandra:
+        ipv4_address: 192.168.1.200
+    cap_add:
+      - IPC_LOCK
+    ulimits:
+      memlock: -1
+    volumes:
+      - ./cass/docker_containers/cass-alpha1/config:/opt/cassandra/conf
+      - ./cass/docker_containers/cass-alpha1/data:/var/lib/cassandra/data
+      - ./cass/docker_containers/cass-alpha1/hints:/var/lib/cassandra/hints
+      - ./cass/docker_containers/cass-alpha1/commitlog:/var/lib/cassandra/commitlog
+      - ./cass/docker_containers/cass-alpha1/cdc_raw:/var/lib/cassandra/cdc_raw
+      - ./cass/docker_containers/cass-alpha1/saved_caches:/var/lib/cassandra/saved_caches
+      - ./cass/docker_containers/cass-alpha1/logs:/var/log/cassandra
