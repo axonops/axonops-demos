@@ -1,4 +1,4 @@
-FROM eclipse-temurin:11.0.26_4-jre-alpine-3.21
+FROM docker.io/eclipse-temurin:11.0.26_4-jre-alpine-3.21
 
 RUN cat /etc/os-release
 RUN uname -r
