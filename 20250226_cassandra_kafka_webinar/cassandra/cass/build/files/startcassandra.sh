@@ -18,6 +18,7 @@ processcount=$(ps -ef | grep java | grep -ie cassandra | grep -v grep | wc -l)
 if (( ${processcount} != 0 )) ; then
     eexit "ERROR - Cassandra process already exists.."
 else
+    cassandra -v
     cassandra > /dev/null 2>&1
     logit "Cassandra Started"
 fi

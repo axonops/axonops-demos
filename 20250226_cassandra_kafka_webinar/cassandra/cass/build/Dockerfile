@@ -3,8 +3,17 @@ FROM docker.io/eclipse-temurin:11.0.26_4-jre
 RUN cat /etc/os-release
 RUN uname -r
 
+ENV JAVA_HOME=/opt/java/openjdk
+ENV PATH=$JAVA_HOME/bin:$PATH
+
+# Verify Java installation (optional debugging step)
+RUN java -version
+
 ENV CASSANDRA_HOME /opt/cassandra
+ENV PATH=$CASSANDRA_HOME/bin:$PATH
+
 ENV CASSANDRA_CONF /opt/cassandra/conf
+
 
 # explicitly set user/group IDs
 RUN set -eux; \
