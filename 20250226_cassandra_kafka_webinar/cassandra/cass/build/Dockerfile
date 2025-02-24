@@ -6,6 +6,11 @@ RUN uname -r
 # Verify Java installation (optional debugging step)
 RUN java -version
 
+ENV CASSANDRA_HOME /opt/cassandra
+ENV CASSANDRA_CONF /opt/cassandra/conf
+ENV CASSANDRA_VERSION 5.0.3
+ENV TARBALL apache-cassandra-${CASSANDRA_VERSION}-bin.tar.gz
+
 # explicitly set user/group IDs
 RUN set -eux; \
 	groupadd -r cassandra --gid=999; \
@@ -82,11 +87,6 @@ RUN set -eux; \
 	gosu --version; \
 	gosu nobody true
 
-
-ENV CASSANDRA_HOME /opt/cassandra
-ENV CASSANDRA_CONF /opt/cassandra/conf
-ENV CASSANDRA_VERSION 5.0.3
-ENV TARBALL apache-cassandra-${CASSANDRA_VERSION}-bin.tar.gz
 
 COPY files/${TARBALL} /${TARBALL}
 
