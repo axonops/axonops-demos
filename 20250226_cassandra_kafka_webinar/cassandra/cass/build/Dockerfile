@@ -121,6 +121,7 @@ COPY files/repaircluster.sh /usr/local/bin/
 COPY files/waitforit.sh /usr/local/bin/
 COPY files/repaircluster.sh /usr/local/bin/
 COPY files/setupcassandradata.sh /usr/local/bin/
+COPY files/permissions.sh /usr/local/bin/
 COPY files/startssh.sh /usr/local/bin/
 COPY files/startwebhooks.sh /usr/local/bin/
 COPY files/startcassandra.sh /usr/local/bin/
@@ -156,6 +157,7 @@ RUN set -eux; \
     chmod 777 /usr/local/bin/waitforit.sh; \
 	chmod 777 /usr/local/bin/repaircluster.sh; \
 	chmod 777 /usr/local/bin/setupcassandradata.sh; \
+	chmod 777 /usr/local/bin/permissions.sh; \
 	chmod 777 /usr/local/bin/startssh.sh; \
 	chmod 777 /usr/local/bin/startwebhooks.sh; \
 	chmod 777 /usr/local/bin/startcassandra.sh; \
