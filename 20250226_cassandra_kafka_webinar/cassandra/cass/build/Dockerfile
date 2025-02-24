@@ -45,9 +45,7 @@ RUN mkdir /var/run/sshd
 
 # Generate SSH host keys
 RUN mkdir -p /etc/ssh
-RUN ssh-keygen -t rsa -b 4096 -N "" -f /etc/ssh/ssh_host_rsa_key && \
-    ssh-keygen -t ecdsa -N "" -f /etc/ssh/ssh_host_ecdsa_key && \
-    ssh-keygen -t ed25519 -N "" -f /etc/ssh/ssh_host_ed25519_key && \
+RUN ssh-keygen -A && \
     chmod 600 /etc/ssh/ssh_host_* && chmod 644 /etc/ssh/ssh_host_*.pub
 
 RUN ls -l /etc/ssh/ssh_host_*
