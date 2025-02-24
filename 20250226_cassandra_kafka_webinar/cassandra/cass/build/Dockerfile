@@ -3,18 +3,10 @@ FROM docker.io/eclipse-temurin:11.0.26_4-jre
 RUN cat /etc/os-release
 RUN uname -r
 
-ENV JAVA_HOME=/opt/java/openjdk
-ENV PATH=$JAVA_HOME/bin:$PATH
-
 # Verify Java installation (optional debugging step)
 RUN java -version
 
-RUN echo "export JAVA_HOME=$JAVA_HOME" >> /etc/profile.d/java.sh && \
-    echo "export PATH=$JAVA_HOME/bin:$PATH" >> /etc/profile.d/java.sh
-
 ENV CASSANDRA_HOME /opt/cassandra
-ENV PATH=$CASSANDRA_HOME/bin:$PATH
-
 ENV CASSANDRA_CONF /opt/cassandra/conf
 
 
@@ -95,7 +87,7 @@ RUN set -eux; \
 	gosu nobody true
 
 
-ENV PATH $CASSANDRA_HOME/bin:$PATH
+ENV PATH $PATH:$CASSANDRA_HOME/bin
 
 ENV CASSANDRA_VERSION 5.0.3
 ENV TARBALL apache-cassandra-${CASSANDRA_VERSION}-bin.tar.gz
