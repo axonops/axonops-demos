@@ -11,13 +11,6 @@ RUN set -eux; \
 	addgroup -g 1001 -S cassandra; \
 	adduser -S -h "$CASSANDRA_HOME" -u 1001 -G cassandra cassandra
 
-#set limits for Cassandra in /etc/security/limits.conf
-RUN set -eux; \
-	echo "cassandra - memlock unlimited" >>  /etc/security/limits.conf; \
-	echo "cassandra - nofile 100000 " >>  /etc/security/limits.conf; \
-	echo "cassandra - nproc 32768 " >>  /etc/security/limits.conf; \
-	echo "cassandra - as unlimited " >>  /etc/security/limits.conf
-
 RUN set -eux; \
 	apt-get update; \
 	apt-get install -y --no-install-recommends \
