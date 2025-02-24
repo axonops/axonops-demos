@@ -21,7 +21,7 @@ services:
     container_name: cass-alpha1
     hostname: cass-alpha1
     mem_limit: 8g
-    entrypoint: ["/bin/sh","-c","startwebhooks.sh && startwebhooks.sh && startcassandra.sh && tailcassandralogs.sh"]
+    entrypoint: ["/bin/sh","-c","startssh.sh && startwebhooks.sh && startwebhooks.sh && startcassandra.sh && tailcassandralogs.sh"]
     ports:
       - "9042:9042"
       - "9001:9000"
