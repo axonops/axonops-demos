@@ -163,6 +163,7 @@ USER cassandra
 
 ENV LOCAL_JMX no
 
+# 22: ssh
 # 7000: intra-node communication
 # 7001: TLS intra-node communication
 # 7199: JMX

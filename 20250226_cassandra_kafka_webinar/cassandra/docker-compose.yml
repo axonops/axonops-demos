@@ -25,7 +25,7 @@ services:
     ports:
       - "9042:9042"
       - "9000:9000"
-      - "22:22"
+      - "2222:22"
     networks:
       axonops-demo-network:
         ipv4_address: 192.168.1.200
