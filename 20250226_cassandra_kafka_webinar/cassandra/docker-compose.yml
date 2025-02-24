@@ -13,6 +13,27 @@ networks:
           ip_range: 192.168.1.200/29
 
 services:
+init:
+  image: busybox
+  command: |
+      sh -c "
+        # Fix permissions for Cassandra data/log dirs
+        chown -R 999:999 /var/lib/cass-alpha1 &&
+        chown -R 999:999 /var/log/cass-alpha1 &&
+
+        # Create AxonOps logs dir
+        # chown -R 9988:9988 /var/log/axonops
+      "
+    
+  volumes:
+      - ./cass/docker_containers/cass-alpha1/config:/opt/cass-alpha1/conf
+      - ./cass/docker_containers/cass-alpha1/data:/var/lib/cass-alpha1/data
+      - ./cass/docker_containers/cass-alpha1/hints:/var/lib/cass-alpha1/hints
+      - ./cass/docker_containers/cass-alpha1/commitlog:/var/lib/cass-alpha1/commitlog
+      - ./cass/docker_containers/cass-alpha1/cdc_raw:/var/lib/cass-alpha1/cdc_raw
+      - ./cass/docker_containers/cass-alpha1/saved_caches:/var/lib/cass-alpha1/saved_caches
+      - ./cass/docker_containers/cass-alpha1/logs:/var/log/cass-alpha1
+
 
   cass-alpha1:
     image: axonops-demo-cassandra:5.0.3
