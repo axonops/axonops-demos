@@ -15,6 +15,7 @@ RUN set -eux; \
 RUN set -eux; \
 	apt-get update; \
 	apt-get install -y --no-install-recommends \
+		sudo \
 		openssh-server \
 		libjemalloc2 \
 		procps \
@@ -37,13 +38,19 @@ RUN set -eux; \
 	ln -sT "$libjemalloc" /usr/local/lib/libjemalloc.so; \
 	ldconfig
 
+RUN echo 'cassandra ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
+
 # Create the SSH runtime directory
 RUN mkdir /var/run/sshd
 
 # Generate SSH host keys
 RUN mkdir -p /etc/ssh
-RUN ssh-keygen -A
-RUN chmod 600 /etc/ssh/ssh_host_* && chmod 644 /etc/ssh/ssh_host_*.pub
+RUN ssh-keygen -t rsa -b 4096 -N "" -f /etc/ssh/ssh_host_rsa_key && \
+    ssh-keygen -t ecdsa -N "" -f /etc/ssh/ssh_host_ecdsa_key && \
+    ssh-keygen -t ed25519 -N "" -f /etc/ssh/ssh_host_ed25519_key && \
+    chmod 600 /etc/ssh/ssh_host_* && chmod 644 /etc/ssh/ssh_host_*.pub
+
+RUN ls -l /etc/ssh/ssh_host_*
 
 
 # Remove the root password to enable passwordless login
