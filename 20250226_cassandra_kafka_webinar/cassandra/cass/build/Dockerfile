@@ -8,8 +8,8 @@ ENV CASSANDRA_CONF /opt/cassandra/conf
 
 # explicitly set user/group IDs
 RUN set -eux; \
-	groupadd -r cassandra --gid=999; \
-	useradd -m -d "$CASSANDRA_HOME" -r -g cassandra --uid=999 cassandra
+	addgroup -g 999 -S cassandra; \
+	adduser -S -h "$CASSANDRA_HOME" -u 999 -G cassandra cassandra
 
 #set limits for Cassandra in /etc/security/limits.conf
 RUN set -eux; \
@@ -75,8 +75,6 @@ RUN set -eux; \
 	gosu --version; \
 	gosu nobody true
 
-ENV CASSANDRA_HOME /opt/cassandra
-ENV CASSANDRA_CONF /etc/cassandra
 ENV PATH $CASSANDRA_HOME/bin:$PATH
 
 ENV CASSANDRA_VERSION 5.0.3
