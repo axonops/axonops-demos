@@ -18,9 +18,6 @@ logit "Starting SSH service..."
 #exec sudo /usr/sbin/sshd -D -e
 sudo /usr/sbin/sshd
 
-sudo chown -R 999:999 /var/lib/cassandra
-sudo chown -R 999:999 /var/log/cassandra
-
 logit $PATH
 
 # Verify that the SSH daemon started successfully
